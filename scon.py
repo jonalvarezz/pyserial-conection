@@ -65,7 +65,7 @@ if len(sys.argv) > 1 :
 		for b in img_bin :
 			while len( b ) < 8 :
 				b = '0' + b
-			if debug : s += b + ', '				
+			if debug : s += b + ', '
 			ser.write(bytes( b, encoding = 'ascii') )
 		if debug : print( s )
 
