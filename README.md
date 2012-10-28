@@ -1,7 +1,9 @@
 pyserial-conection
 ==================
 
-Binarización de una imagen y envio a través de Conexión serial utilizando pyserial, python
+Binarización de una imagen y envio a través de Conexión serial utilizando PIL y pyserial, python
+
+
 
 __Universidad Tecnológica de Pereira<br />__
 __Ingieneria en Sistemas y Computación__
