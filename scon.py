@@ -13,66 +13,66 @@
 
 import serial
 import sys
-import binascii
+import Image
 
 # ---------------
 # IMG TO BINARY
+# 1 Pixel = 36 bytes = 4 bits
 # ---------------
 
-def img2bin( imgpath ) :
+def img2bin( imgpath, imgout ) :
 	try:
-	    fin = open(imgpath, "rb")
-	    data = fin.read()
-	    fin.close()
+	    im = Image.open(imgpath)	    
 	except IOError:
-	    print("Image file %s not found" % imageFile)
-	else :
-		# convert every byte of data to the corresponding 2-digit hexadecimal
-		hex_str = str(binascii.hexlify(data))
-		# now create a list of 2-digit hexadecimals
-		hex_list = []
-		bin_list = []
-		for ix in range(2, len(hex_str)-1, 2):
-		    hex = hex_str[ix]+hex_str[ix+1]
-		    hex_list.append(hex)
-		    bin_list.append(bin(int(hex, 16))[2:])
-		#print(bin_list)
-		bin_str = "".join(bin_list)
-		return bin_list
+	    print("Image file not found")
+	else:
+		x,y = im.size
+
+		for i in range(x):
+			for j in range(y):
+				r,g,b = im.getpixel((i,j))
+				if( (r+g+b)/3 < 125 ) :
+					im.putpixel((i,j),(0,0,0))
+				else:
+					im.putpixel((i,j),(255,255,255))
+		if imgout: im.save(imgout)
 
 # ---------------
 # SERIAL CONECTION
 # ---------------
-debug = True
+def main() :
+	ser = serial.Serial('COM1')
+	ser.baudrate = 115200
+	ser.bytesize = serial.EIGHTBITS
+	ser.parity = serial.PARITY_NONE
+	ser.stopbits = serial.STOPBITS_ONE
+	ser.xonxoff = False
 
-ser = serial.Serial('COM1')
-ser.baudrate = 9600
-ser.bytesize = serial.EIGHTBITS
-ser.parity = serial.PARITY_NONE
-ser.stopbits = serial.STOPBITS_ONE
-ser.xonxoff = False
+	if not ser.isOpen():
+		ser.open()
 
-if not ser.isOpen():
-	ser.open()
+	if len(sys.argv) > 1 :
+		try:
+			#abrir imagen
+			im = Image.open(sys.argv[1])
+		except IOError:
+		    print("Image file not found")
+		else:
+			x,y = im.size
 
-if len(sys.argv) > 1 :
-	try:
-		#abrir imagen
-		img_bin = img2bin(sys.argv[1])
-		
-		#Normalizar y escribir a 8bits,
-		if debug : s = ''
-		for b in img_bin :
-			while len( b ) < 8 :
-				b = '0' + b
-			if debug : s += b + ', '
-			ser.write(bytes( b, encoding = 'ascii') )
-		if debug : print( s )
+			for i in range(x):
+				for j in range(y):
+					r,g,b = im.getpixel((i,j))
+					if( (r+g+b)/3 < 125 ) :
+						im.putpixel((i,j),(0,0,0))
+						ser.write('0')
+					else:
+						im.putpixel((i,j),(255,255,255))
+						ser.write('1')
 
-	except IOError:
-	    print("Image file %s not found" % imageFile)
-	else:
-		print( "Dato enviado")
-		ser.close()
-else :
-	print( "Image File argument expected" )
+			ser.close()
+	else :
+		print( "Image File argument expected" )
+
+
+main()
