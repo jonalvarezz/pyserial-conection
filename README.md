@@ -11,6 +11,14 @@ python scon.py ImgIn [ImgOut]
 *ImgIn: Ruta de la imagen a binarizar y enviar*<br />
 *ImgOut: Nombre de la imagen binarizada para ser guardada.*
 
+
+__Notas Técnicas__<br />
+* FPGA: Nexys 2
+* Implementación de RAM distribuida.
+* Ram con 20 bloques, cada uno de 16Kbits. En total 320Kbits
+* Tamaño por pixel: 8 bits
+* Tamaño Máximo de imágen a enviar: `320k/8 = 40k` -> 200x200 px
+
 __Universidad Tecnológica de Pereira - Ingieneria en Sistemas y Computación__
 
 

@@ -17,7 +17,6 @@ import Image
 
 # ---------------
 # IMG TO BINARY
-# 1 Pixel = 36 bytes = 4 bits
 # ---------------
 
 def img2bin( imgpath, imgout ) :
