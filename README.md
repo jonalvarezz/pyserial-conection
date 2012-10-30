@@ -14,7 +14,7 @@ python scon.py ImgIn [ImgOut]
 
 __Notas Técnicas__<br />
 * FPGA: Nexys 2
-* Implementación de RAM distribuida.
+* Implementación de RAM por bloques.
 * Ram con 20 bloques, cada uno de 16Kbits. En total 320Kbits
 * Tamaño por pixel: 8 bits
 * Tamaño Máximo de imágen a enviar: `320k/8 = 40k` -> 200x200 px
